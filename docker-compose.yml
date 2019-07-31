@@ -1,0 +1,11 @@
+---
+version: '3.2'
+services:
+  dht_exporter:
+    build:
+      context: https://github.com/Koma-Andrea/dht-exporter.git
+    container_name: "dht"
+    privileged: true
+    restart: "always"
+    ports:
+      - 8001:8001
