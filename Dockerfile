@@ -14,7 +14,7 @@ apk add libc-dev gcc git; \
 pip install prometheus_client Adafruit_DHT; \
 git clone --depth 1 --branch ${GIT_VERSION} ${REPO} ${WORKDIR}; \
 cp  ${WORKDIR}/dht_exporter.py /bin/dht_exporter.py; \
-rm -fr /root/.cache/pip/; rm -rf /var/cache/apk/*
+rm -fr /root/.cache/pip/; rm -rf /var/cache/apk/*; chmod +x /bin/dht_exporter.py
 
 ENV \
 SENSOR="DHT11" \
