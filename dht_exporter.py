@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import print_function
+import signal
+import sys
 import argparse
 import random
 import time
 import Adafruit_DHT
 from prometheus_client import start_http_server, Gauge
-import signal
-import sys
+
  
 def signal_term_handler(signal, frame):
     print("got SIGTERM")
