@@ -1,31 +1,28 @@
 # Builder
 FROM arm32v7/python:alpine
 
-MAINTAINER Andrea Cervesato <koma@redhat.com> (https://github.com/u/Koma-Andrea)
+LABEL maintainer="Andrea Cervesato <koma@redhat.com> (https://github.com/u/Koma-Andrea)"
 
-ENV GIT_VERSION "v1.0"
+ENV \
+GIT_VERSION="v1.0" \
+REPO="https://github.com/Koma-Andrea/dht-exporter.git" \
+WORKDIR=/tmp/dht-exporter
 
-ENV REPO "https://github.com/Koma-Andrea/dht-exporter.git"
+# Install dependencies
+RUN \
+apk add libc-dev gcc git; \
+pip install prometheus_client Adafruit_DHT; \
+git clone --depth 1 --branch ${GIT_VERSION} ${REPO} ${WORKDIR}; \
+cp  ${WORKDIR}/dht_exporter.py /bin/dht_exporter.py; \
+rm -fr /root/.cache/pip/; rm -rf /var/cache/apk/*
 
-ENV WORKDIR /tmp/dht-exporter
-
-RUN apk add libc-dev gcc git
-
-RUN pip install prometheus_client Adafruit_DHT
-
-RUN git clone --depth 1 --branch ${GIT_VERSION} ${REPO} ${WORKDIR}
-
-RUN cp  ${WORKDIR}/dht_exporter.py /bin/dht_exporter.py
+ENV \
+SENSOR="DHT11" \
+PULL="5" \
+GPIO="4" \
+ROOM="none"
 
 EXPOSE  8001
-
-ENV SENSOR DHT11
-
-ENV PULL 5
-
-ENV GPIO 4
-
-ENV ROOM none
 
 ENTRYPOINT  [ "/bin/dht_exporter.py" ]
 
