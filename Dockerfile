@@ -20,7 +20,7 @@ ENV \
 SENSOR="DHT11" \
 PULL="5" \
 GPIO="4" \
-ROOM="none"
+ROOM="none" 
 
 EXPOSE  8001
 
