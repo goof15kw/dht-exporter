@@ -10,7 +10,7 @@ COPY entrypoint.sh /bin/entrypoint.sh
 RUN \
 apk add libc-dev gcc git; \
 pip install prometheus_client Adafruit_DHT; \
-rm -fr /root/.cache/pip/; rm -rf /var/cache/apk/*; chmod +x /bin/dht_exporter.py
+rm -fr /root/.cache/pip/; rm -rf /var/cache/apk/*; chmod +x /bin/dht_exporter.py /bin/entrypoint.sh; 
 
 ENV \
 SENSOR="DHT11" \
