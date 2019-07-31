@@ -4,7 +4,7 @@ FROM arm32v7/python:alpine
 LABEL maintainer="Andrea Cervesato <koma@redhat.com> (https://github.com/u/Koma-Andrea)"
 
 ENV \
-GIT_VERSION="v1.1" \
+GIT_VERSION="stable" \
 REPO="https://github.com/Koma-Andrea/dht-exporter.git" \
 WORKDIR=/tmp/dht-exporter
 
