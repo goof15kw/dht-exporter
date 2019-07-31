@@ -14,6 +14,7 @@ apk add libc-dev gcc git; \
 pip install prometheus_client Adafruit_DHT; \
 git clone --depth 1 --branch ${GIT_VERSION} ${REPO} ${WORKDIR}; \
 cp  ${WORKDIR}/dht_exporter.py /bin/dht_exporter.py; \
+cp  ${WORKDIR}/entrypoint.sh /bin/entrypoint.sh; \
 rm -fr /root/.cache/pip/; rm -rf /var/cache/apk/*; chmod +x /bin/dht_exporter.py
 
 ENV \
@@ -24,6 +25,4 @@ ROOM="none"
 
 EXPOSE  8001
 
-ENTRYPOINT  [ "/bin/dht_exporter.py" ]
-
-CMD         [ "--sensor", "${$SENSOR}", "--pull", "${PULL}", "--gpio", "${GPIO}", "--room", "${ROOM}" ]
+ENTRYPOINT  [ "/bin/entrypoint.sh" ]
