@@ -1,8 +1,11 @@
 # DHT Exporter for Raspberry PI with docker
 
 > Note: This project has been forked from matejp/dht-exporter.
-> Note: This project has been forked from Koma-Andrea/dht-exporter
 I've rewritten part of the code to be compatible with docker images and make user of environment variables.
+
+
+> Note: This project has been forked from Koma-Andrea/dht-exporter.
+I changed Changed label names.
 
 ## Usage:
 
