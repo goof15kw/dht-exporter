@@ -17,10 +17,10 @@ def signal_term_handler(signal, frame):
 signal.signal(signal.SIGTERM, signal_term_handler)
 
 # Create a metric to track time spent and requests made.
-g_temperature = Gauge('dht_temperature', 'Temperature in celsius provided by dht sensor or similar', ['soba'])
-g_humidity = Gauge('dht_humidity', 'Humidity in percents provided by dht sensor or similar', ['soba'])
+g_temperature = Gauge('dht_temperature', 'Temperature in celsius provided by dht sensor or similar', ['location'])
+g_humidity = Gauge('dht_humidity', 'Humidity in percents provided by dht sensor or similar', ['location'])
 
-def update_sensor_data(gpio_pin, room, sensor):
+def update_sensor_data(gpio_pin, location, sensor):
     """Get sensor data and sleep."""
     # get sensor data from gpio pin provided in the argument
     if sensor == "DHT11":
@@ -35,21 +35,21 @@ def update_sensor_data(gpio_pin, room, sensor):
 
     if humidity is not None and temperature is not None:
         if abs(temperature) < 100:     #If sensor returns veird value ignore it and wait for the next one
-            g_temperature.labels(room).set('{0:0.1f}'.format(temperature))
+            g_temperature.labels(location).set('{0:0.1f}'.format(temperature))
         if abs(humidity) < 100:        #If sensor returns veird value ignore it and wait for the next one
-           g_humidity.labels(room).set('{0:0.1f}'.format(humidity))
+           g_humidity.labels(location).set('{0:0.1f}'.format(humidity))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--pull_time", type=int, default=5, help="Pull sensor data every X seconds.")
+    parser.add_argument("-p", "--pull_time", type=int, default=60, help="Pull sensor data every X seconds.")
     parser.add_argument("-g", "--gpio",      type=int, nargs='+', help="Set GPIO pin id to listen for DHT sensor data.", required=True)
-    parser.add_argument("-r", "--room",      type=str, nargs='+', help="Set room name.", required=True)
+    parser.add_argument("-l", "--location",      type=str, nargs='+', help="Set location name.", required=True)
     parser.add_argument("-s", "--sensor",    type=str, nargs='+', help="Sensor model [DHT11|DHT22|AM2302].", default="DHT11")
     cli_arguments = parser.parse_args()
 
-    if len(cli_arguments.gpio) != len(cli_arguments.room):
-        print("The number of gpio pins set needs to be the same as number of rooms set" \
-              "\n Number of gpio pins: {g}\n Number of rooms: {r}".format(g=len(cli_arguments.gpio), r=len(cli_arguments.room)))
+    if len(cli_arguments.gpio) != len(cli_arguments.location):
+        print("The number of gpio pins set needs to be the same as number of locations set" \
+              "\n Number of gpio pins: {g}\n Number of locations: {r}".format(g=len(cli_arguments.gpio), r=len(cli_arguments.location)))
         exit(1)
     # Start up the server to expose the metrics.
     start_http_server(8001)
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     # Update temperature and humidity
     while True:
         for id, gpio_pin in enumerate(cli_arguments.gpio):
-            update_sensor_data(gpio_pin, cli_arguments.room[id], cli_arguments.sensor[id])
+            update_sensor_data(gpio_pin, cli_arguments.location[id], cli_arguments.sensor[id])
         time.sleep(cli_arguments.pull_time)
 
 
